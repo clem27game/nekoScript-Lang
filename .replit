@@ -3,7 +3,7 @@ modules = ["python-3.11"]
 
 [nix]
 channel = "stable-24_05"
-packages = ["zulu11", "antlr"]
+packages = ["antlr", "zulu11"]
 
 [unitTest]
 language = "python3"

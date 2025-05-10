@@ -22,16 +22,17 @@ Téléchargez les fichiers de NekoScript ou clonez ce dépôt via git.
 
 ```bash
 git clone https://github.com/clem27game/nekoScript-Lang
-cd nekoscript
+cd nekoscript-Lang
 ```
 
 ### 2. Installer NekoScript
 
 Une fois que vous avez téléchargé les fichiers de **NekoScript**, exécutez le script d'installation suivant pour installer **NekoScript** et configurer la commande `neko-script` sur votre machine.
 
-```bash
-python3 installer.py
-```
+Cloner le repo : git clone https://github.com/clem27game/nekoScript-Lang
+Aller dans le dossier : cd nekoScript-Lang
+Installer nekoScript : bash install.sh
+Utiliser la commande : neko-script télécharger
 
 Ce script fera les choses suivantes :
 
