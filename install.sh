@@ -16,7 +16,8 @@ cp nekoScriptParser.py "$INSTALL_DIR/"
 cp nekoScriptVisitor.py "$INSTALL_DIR/"
 
 # Étape 4 : Créer le script exécutable neko-script
-SCRIPT_PATH="/usr/local/bin/neko-script"
+SCRIPT_PATH="$HOME/.local/bin/neko-script"
+mkdir -p "$HOME/.local/bin"
 echo "Création du script exécutable..."
 
 cat > "$SCRIPT_PATH" << 'EOF'
