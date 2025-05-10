@@ -1,4 +1,3 @@
-
 import os
 import sys
 import shutil
@@ -13,7 +12,7 @@ package_dir = os.path.expanduser("~/.nekoScript/packages")
 class NekoInterpreter(nekoScriptVisitor):
     def visitScript(self, ctx):
         return self.visitChildren(ctx)
-        
+
     def visitAffectation(self, ctx):
         identifiant = ctx.IDENTIFIANT().getText()
         valeur = self.visit(ctx.valeur())
@@ -25,7 +24,7 @@ class NekoInterpreter(nekoScriptVisitor):
         val1 = self.visit(ctx.valeur(0))
         val2 = self.visit(ctx.valeur(1))
         operateur = ctx.operateur().getText()
-        
+
         try:
             if operateur == 'plus':
                 resultat = float(val1) + float(val2)
@@ -52,7 +51,7 @@ class NekoInterpreter(nekoScriptVisitor):
             val = self.visit(param)
             if val is not None:
                 params.append(str(val))
-                
+
         if fonction == "nekAfficher":
             print(*params)
         return None
@@ -132,6 +131,31 @@ class NekoInterpreter(nekoScriptVisitor):
             return variables.get(identifiant)
         return None
 
+    def visitAppelExterne(self, ctx:nekoScriptParser.AppelExterneContext):
+        type_appel = ctx.IDENTIFIANT().getText()
+        fichier = ctx.STRING().getText().strip('"')
+
+        if type_appel == "nekAppelerJs":
+            try:
+                import subprocess
+                result = subprocess.run(['node', fichier], capture_output=True, text=True)
+                if result.stdout:
+                    print(result.stdout)
+                return result.stdout
+            except Exception as e:
+                print(f"Erreur lors de l'appel JavaScript: {str(e)}")
+
+        elif type_appel == "nekAppelerPython":
+            try:
+                with open(fichier, 'r') as f:
+                    code = f.read()
+                    exec(code, globals())
+                return None
+            except Exception as e:
+                print(f"Erreur lors de l'appel Python: {str(e)}")
+
+        return None
+
 def execute_neko_file(file_path):
     try:
         input_stream = FileStream(file_path, encoding='utf-8')
@@ -139,7 +163,7 @@ def execute_neko_file(file_path):
         stream = CommonTokenStream(lexer)
         parser = nekoScriptParser(stream)
         tree = parser.script()
-        
+
         interpreter = NekoInterpreter()
         interpreter.visit(tree)
     except Exception as e:
