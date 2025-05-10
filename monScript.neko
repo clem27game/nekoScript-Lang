@@ -1,0 +1,3 @@
+nekAfficher("Bonjour, Neko!");
+compteneko = 5 plus 3;
+nekAfficher(compteneko);
