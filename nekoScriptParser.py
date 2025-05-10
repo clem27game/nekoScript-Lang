@@ -1,4 +1,4 @@
-# Generated from nekoScript.g4 by ANTLR 4.13.2
+# Generated from nekoScript.g4 by ANTLR 4.13.0
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -187,7 +187,7 @@ class nekoScriptParser ( Parser ):
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
-        self.checkVersion("4.13.2")
+        self.checkVersion("4.13.0")
         self._interp = ParserATNSimulator(self, self.atn, self.decisionsToDFA, self.sharedContextCache)
         self._predicates = None
 
@@ -221,6 +221,12 @@ class nekoScriptParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitScript" ):
                 listener.exitScript(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitScript" ):
+                return visitor.visitScript(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -306,6 +312,12 @@ class nekoScriptParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitInstruction" ):
                 listener.exitInstruction(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitInstruction" ):
+                return visitor.visitInstruction(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -407,6 +419,12 @@ class nekoScriptParser ( Parser ):
             if hasattr( listener, "exitAffectation" ):
                 listener.exitAffectation(self)
 
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitAffectation" ):
+                return visitor.visitAffectation(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
@@ -476,6 +494,12 @@ class nekoScriptParser ( Parser ):
             if hasattr( listener, "exitOperation" ):
                 listener.exitOperation(self)
 
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitOperation" ):
+                return visitor.visitOperation(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
@@ -540,6 +564,12 @@ class nekoScriptParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitAppelFonction" ):
                 listener.exitAppelFonction(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitAppelFonction" ):
+                return visitor.visitAppelFonction(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -617,6 +647,12 @@ class nekoScriptParser ( Parser ):
             if hasattr( listener, "exitImportation" ):
                 listener.exitImportation(self)
 
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitImportation" ):
+                return visitor.visitImportation(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
@@ -676,6 +712,12 @@ class nekoScriptParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitBlocSite" ):
                 listener.exitBlocSite(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitBlocSite" ):
+                return visitor.visitBlocSite(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -750,6 +792,12 @@ class nekoScriptParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitContenuSite" ):
                 listener.exitContenuSite(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitContenuSite" ):
+                return visitor.visitContenuSite(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -909,6 +957,12 @@ class nekoScriptParser ( Parser ):
             if hasattr( listener, "exitStyleInstruction" ):
                 listener.exitStyleInstruction(self)
 
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitStyleInstruction" ):
+                return visitor.visitStyleInstruction(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
@@ -971,6 +1025,12 @@ class nekoScriptParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitPackageDeclaration" ):
                 listener.exitPackageDeclaration(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitPackageDeclaration" ):
+                return visitor.visitPackageDeclaration(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -1045,6 +1105,12 @@ class nekoScriptParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitPackageInstruction" ):
                 listener.exitPackageInstruction(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitPackageInstruction" ):
+                return visitor.visitPackageInstruction(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -1144,6 +1210,12 @@ class nekoScriptParser ( Parser ):
             if hasattr( listener, "exitParamList" ):
                 listener.exitParamList(self)
 
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitParamList" ):
+                return visitor.visitParamList(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
@@ -1197,6 +1269,12 @@ class nekoScriptParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitTerminalCommand" ):
                 listener.exitTerminalCommand(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitTerminalCommand" ):
+                return visitor.visitTerminalCommand(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -1282,6 +1360,12 @@ class nekoScriptParser ( Parser ):
             if hasattr( listener, "exitAppelExterne" ):
                 listener.exitAppelExterne(self)
 
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitAppelExterne" ):
+                return visitor.visitAppelExterne(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
@@ -1358,6 +1442,12 @@ class nekoScriptParser ( Parser ):
             if hasattr( listener, "exitValeur" ):
                 listener.exitValeur(self)
 
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitValeur" ):
+                return visitor.visitValeur(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
@@ -1402,6 +1492,12 @@ class nekoScriptParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitOperateur" ):
                 listener.exitOperateur(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitOperateur" ):
+                return visitor.visitOperateur(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -1449,6 +1545,12 @@ class nekoScriptParser ( Parser ):
         def exitRule(self, listener:ParseTreeListener):
             if hasattr( listener, "exitCommentaire" ):
                 listener.exitCommentaire(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitCommentaire" ):
+                return visitor.visitCommentaire(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 

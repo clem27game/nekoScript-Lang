@@ -16,9 +16,9 @@ if not os.path.exists(neko_dir):
 shutil.copy(os.path.join(current_dir, "nekoScriptInterpreter.py"), neko_dir)
 
 # Copier les fichiers nécessaires pour lexer, parser, visitor (adapté à ton projet)
-shutil.copy(os.path.join(current_dir, "src", "nekoScriptLexer.py"), os.path.join(neko_dir, "nekoScriptLexer.py"))
-shutil.copy(os.path.join(current_dir, "src", "nekoScriptParser.py"), os.path.join(neko_dir, "nekoScriptParser.py"))
-shutil.copy(os.path.join(current_dir, "src", "nekoScriptVisitor.py"), os.path.join(neko_dir, "nekoScriptVisitor.py"))
+shutil.copy(os.path.join(current_dir, "", "nekoScriptLexer.py"), os.path.join(neko_dir, "nekoScriptLexer.py"))
+shutil.copy(os.path.join(current_dir, "", "nekoScriptParser.py"), os.path.join(neko_dir, "nekoScriptParser.py"))
+shutil.copy(os.path.join(current_dir, "", "nekoScriptVisitor.py"), os.path.join(neko_dir, "nekoScriptVisitor.py"))
 
 # Ajouter un alias global dans le fichier ~/.bashrc (ou fichier similaire selon l'OS)
 bashrc_path = os.path.expanduser("~/.bashrc")
