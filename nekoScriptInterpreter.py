@@ -26,24 +26,29 @@ class NekoInterpreter(nekoScriptVisitor):
         
         resultat = None
         if operateur == 'plus':
-            resultat = val1 + val2
+            resultat = float(val1) + float(val2)
         elif operateur == 'moins':
-            resultat = val1 - val2
+            resultat = float(val1) - float(val2)
         elif operateur == 'multiplier':
-            resultat = val1 * val2
+            resultat = float(val1) * float(val2)
         elif operateur == 'diviser':
-            resultat = val1 / val2 if val2 != 0 else None
-            
-        if resultat is not None:
-            variables[identifiant] = resultat
+            if float(val2) != 0:
+                resultat = float(val1) / float(val2)
+            else:
+                print("Erreur: Division par zéro")
+                return None
+                
+        variables[identifiant] = resultat
         return None
 
     def visitAppelFonction(self, ctx):
         fonction = ctx.IDENTIFIANT().getText()
-        if fonction == "Afficher":
+        if fonction == "nekAfficher":
             params = []
             for param in ctx.valeur():
-                params.append(self.visit(param))
+                val = self.visit(param)
+                if val is not None:
+                    params.append(str(val))
             print(*params)
         return None
 
@@ -62,14 +67,17 @@ def main():
         print("Usage: python3 nekoScriptInterpreter.py <fichier.neko>")
         return
 
-    input_stream = FileStream(sys.argv[1], encoding='utf-8')
-    lexer = nekoScriptLexer(input_stream)
-    stream = CommonTokenStream(lexer)
-    parser = nekoScriptParser(stream)
-    tree = parser.script()
+    try:
+        input_stream = FileStream(sys.argv[1], encoding='utf-8')
+        lexer = nekoScriptLexer(input_stream)
+        stream = CommonTokenStream(lexer)
+        parser = nekoScriptParser(stream)
+        tree = parser.script()
     
-    interpreter = NekoInterpreter()
-    interpreter.visit(tree)
+        interpreter = NekoInterpreter()
+        interpreter.visit(tree)
+    except Exception as e:
+        print(f"Erreur lors de l'exécution: {str(e)}")
 
 if __name__ == '__main__':
     main()
