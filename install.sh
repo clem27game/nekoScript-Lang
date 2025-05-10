@@ -1,10 +1,10 @@
 
 #!/bin/bash
 
-# Vérifier si le dossier "nekoScript-Lang" existe
+# Télécharger nekoScript-Lang s'il n'existe pas
 if [ ! -d "nekoScript-Lang" ]; then
-  echo "Le dossier nekoScript-Lang n'existe pas !"
-  exit 1
+  echo "Téléchargement de nekoScript-Lang..."
+  git clone https://github.com/clem27game/nekoScript-Lang
 fi
 
 # Accéder au dossier où se trouve le projet
