@@ -77,26 +77,25 @@ class NekoInterpreter(nekoScriptVisitor):
         return self.visitChildren(ctx)
 
     def visitTerminalCommand(self, ctx):
-        command = ctx.STRING().getText().strip('"')
-        if command.startswith("neko-script"):
-            parts = command.split()
-            if len(parts) >= 2:
-                action = parts[1]
-                if action == "execute":
-                    if len(parts) == 3:
-                        execute_neko_file(parts[2])
-                    else:
-                        print("Usage: neko-script execute <fichier>")
-                elif action == "publish":
-                    if len(parts) == 3:
-                        self.publish_package(parts[2])
-                    else:
-                        print("Usage: neko-script publish <fichier.neko>")
-                elif action == "librairie":
-                    if len(parts) == 3:
-                        self.download_package(parts[2])
-                    else:
-                        print("Usage: neko-script librairie <package>")
+        try:
+            command = sys.argv[1] if len(sys.argv) > 1 else ""
+            if command == "publish":
+                if len(sys.argv) == 3:
+                    self.publish_package(sys.argv[2])
+                else:
+                    print("Usage: neko-script publish <fichier.neko>")
+            elif command == "execute":
+                if len(sys.argv) == 3:
+                    execute_neko_file(sys.argv[2])
+                else:
+                    print("Usage: neko-script execute <fichier>")
+            elif command == "librairie":
+                if len(sys.argv) == 3:
+                    self.download_package(sys.argv[2])
+                else:
+                    print("Usage: neko-script librairie <package>")
+        except Exception as e:
+            print(f"Erreur lors de l'exécution de la commande: {str(e)}")
         return None
 
     def publish_package(self, package_path):
@@ -170,11 +169,16 @@ def execute_neko_file(file_path):
         print(f"Erreur lors de l'exécution: {str(e)}")
 
 def main():
-    if len(sys.argv) != 3 or sys.argv[1] != "execute":
-        print("Usage: neko-script execute <fichier.neko>")
-        return
+    try:
+        if len(sys.argv) < 2:
+            print("Usage: neko-script <commande> <fichier>")
+            print("Commandes disponibles: execute, publish, librairie")
+            return
 
-    execute_neko_file(sys.argv[2])
+        interpreter = NekoInterpreter()
+        interpreter.visitTerminalCommand(None)
+    except Exception as e:
+        print(f"Erreur: {str(e)}")
 
 if __name__ == '__main__':
     main()
