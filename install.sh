@@ -1,14 +1,4 @@
-
 #!/bin/bash
-
-# Télécharger nekoScript-Lang s'il n'existe pas
-if [ ! -d "nekoScript-Lang" ]; then
-  echo "Téléchargement de nekoScript-Lang..."
-  git clone https://github.com/clem27game/nekoScript-Lang
-fi
-
-# Accéder au dossier où se trouve le projet
-cd nekoScript-Lang
 
 # Étape 1 : Installer les dépendances Python
 echo "Installation des dépendances Python..."
@@ -18,7 +8,7 @@ python3 -m pip install antlr4-python3-runtime
 INSTALL_DIR="$HOME/.nekoScript"
 mkdir -p "$INSTALL_DIR"
 
-# Étape 3 : Copier les fichiers nécessaires
+# Étape 3 : Copier les fichiers nécessaires depuis le dossier local
 echo "Copie des fichiers dans $INSTALL_DIR..."
 cp nekoScriptInterpreter.py "$INSTALL_DIR/"
 cp nekoScriptLexer.py "$INSTALL_DIR/"
@@ -34,16 +24,7 @@ cat > "$SCRIPT_PATH" << 'EOF'
 
 NEKO_HOME="$HOME/.nekoScript"
 
-case "$1" in
-  "télécharger")
-    echo "Téléchargement de nekoScript..."
-    git clone https://github.com/clem27game/nekoScript-Lang
-    cd nekoScript-Lang && bash install.sh
-    ;;
-  *)
-    python3 "$NEKO_HOME/nekoScriptInterpreter.py" "$@"
-    ;;
-esac
+python3 "$NEKO_HOME/nekoScriptInterpreter.py" "$@"
 EOF
 
 # Étape 5 : Donner les droits d'exécution
