@@ -20,18 +20,26 @@ class NekoInterpreter(nekoScriptVisitor):
         return results
 
     def visitAffectation(self, ctx):
-        identifiant = ctx.IDENTIFIANT().getText()
-        valeur = self.visit(ctx.valeur())
-        variables[identifiant] = valeur
-        return valeur
+        try:
+            identifiant = ctx.IDENTIFIANT().getText()
+            valeur = self.visit(ctx.valeur())
+            variables[identifiant] = valeur
+            return valeur
+        except Exception as e:
+            print(f"Erreur d'affectation: {str(e)}")
+            return None
 
     def visitOperation(self, ctx):
-        val1 = self.visit(ctx.valeur(0))
-        val2 = self.visit(ctx.valeur(1))
-        operateur = ctx.operateur().getText()
-
         try:
+            val1 = self.visit(ctx.valeur(0))
+            val2 = self.visit(ctx.valeur(1))
+            operateur = ctx.operateur().getText()
+
+            if val1 is None or val2 is None:
+                raise ValueError("Valeurs invalides pour l'opération")
+
             val1, val2 = float(val1), float(val2)
+            
             if operateur == 'plus':
                 return val1 + val2
             elif operateur == 'moins':
@@ -39,73 +47,52 @@ class NekoInterpreter(nekoScriptVisitor):
             elif operateur == 'multiplier':
                 return val1 * val2
             elif operateur == 'diviser':
-                if val2 != 0:
-                    return val1 / val2
-                raise ValueError("Division par zéro")
-        except (ValueError, TypeError) as e:
+                if val2 == 0:
+                    raise ValueError("Division par zéro")
+                return val1 / val2
+            else:
+                raise ValueError(f"Opérateur inconnu: {operateur}")
+        except Exception as e:
             print(f"Erreur d'opération: {str(e)}")
             return None
 
     def visitAppelFonction(self, ctx):
-        fonction = ctx.IDENTIFIANT().getText()
-        params = [self.visit(param) for param in ctx.valeur()]
-        
-        if fonction == "nekAfficher":
-            print(*params)
-            return params[0] if params else None
-        return None
+        try:
+            fonction = ctx.IDENTIFIANT().getText()
+            params = []
+            for param in ctx.valeur():
+                val = self.visit(param)
+                if val is not None:
+                    params.append(val)
 
-    def visitImportation(self, ctx):
-        fichier = ctx.STRING().getText().strip('"')
-        if os.path.exists(fichier):
-            try:
-                with open(fichier, 'r', encoding='utf-8') as f:
-                    code = f.read()
-                    input_stream = InputStream(code)
-                    lexer = nekoScriptLexer(input_stream)
-                    stream = CommonTokenStream(lexer)
-                    parser = nekoScriptParser(stream)
-                    tree = parser.script()
-                    return self.visit(tree)
-            except Exception as e:
-                print(f"Erreur d'importation: {str(e)}")
-        else:
-            print(f"Fichier non trouvé: {fichier}")
-        return None
-
-    def visitPackageDeclaration(self, ctx):
-        package_name = ctx.IDENTIFIANT().getText()
-        self.current_package = package_name
-        return self.visitChildren(ctx)
-
-    def visitAppelExterne(self, ctx):
-        type_appel = ctx.IDENTIFIANT().getText()
-        fichier = ctx.STRING().getText().strip('"')
-
-        if type_appel == "nekAppelerJs":
-            try:
-                import subprocess
-                process = subprocess.run(['node', fichier], 
-                                      capture_output=True, 
-                                      text=True, 
-                                      check=True)
-                if process.stdout:
-                    print(process.stdout.strip())
-                return process.stdout.strip()
-            except subprocess.CalledProcessError as e:
-                print(f"Erreur JavaScript: {e.stderr}")
-            except Exception as e:
-                print(f"Erreur d'exécution: {str(e)}")
-        return None
+            if fonction == "nekAfficher":
+                if params:
+                    print(*params)
+                    return params[0]
+                else:
+                    print()
+                    return None
+            else:
+                raise ValueError(f"Fonction inconnue: {fonction}")
+        except Exception as e:
+            print(f"Erreur d'appel de fonction: {str(e)}")
+            return None
 
     def visitValeur(self, ctx):
-        if ctx.STRING():
-            return ctx.STRING().getText().strip('"')
-        elif ctx.INT():
-            return float(ctx.INT().getText())
-        elif ctx.IDENTIFIANT():
-            return variables.get(ctx.IDENTIFIANT().getText())
-        return None
+        try:
+            if ctx.STRING():
+                return ctx.STRING().getText().strip('"')
+            elif ctx.INT():
+                return float(ctx.INT().getText())
+            elif ctx.IDENTIFIANT():
+                ident = ctx.IDENTIFIANT().getText()
+                if ident in variables:
+                    return variables[ident]
+                raise ValueError(f"Variable non définie: {ident}")
+            return None
+        except Exception as e:
+            print(f"Erreur de valeur: {str(e)}")
+            return None
 
 def execute_neko_file(file_path):
     if not os.path.exists(file_path):
@@ -130,8 +117,8 @@ def execute_neko_file(file_path):
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: neko-script <command> <file>")
-        print("Commands: execute, publish, librairie")
+        print("Usage: neko-script <commande> <fichier>")
+        print("Commandes disponibles: execute, publish, librairie")
         return
 
     command = sys.argv[1]
