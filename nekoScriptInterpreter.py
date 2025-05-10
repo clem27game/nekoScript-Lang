@@ -68,7 +68,20 @@ class NekoInterpreter(nekoScriptVisitor):
                     else:
                         print("Usage: neko-script execute <fichier>")
                 elif action == "publish":
-                    print("Publication du package...")
+                    if len(parts) == 3:
+                        package_path = parts[2]
+                        try:
+                            if os.path.exists(package_path):
+                                package_dir = os.path.expanduser("~/.nekoScript/packages")
+                                os.makedirs(package_dir, exist_ok=True)
+                                shutil.copy(package_path, os.path.join(package_dir, os.path.basename(package_path)))
+                                print(f"Package {package_path} publié avec succès!")
+                            else:
+                                print(f"Erreur: Le fichier {package_path} n'existe pas")
+                        except Exception as e:
+                            print(f"Erreur lors de la publication: {str(e)}")
+                    else:
+                        print("Usage: neko-script publish <fichier.neko>")
                 elif action == "librairie":
                     print("Téléchargement de la librairie...")
                 else:
